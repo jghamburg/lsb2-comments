@@ -15,12 +15,9 @@ services:
       - "9000:9000" # web port
     environment:
       PROFILE: "local"
-      OTTO_GROUP: "local"
     networks:
       - learn-ms-network
 
 networks:
   learn-ms-network:
     external: true
-
-

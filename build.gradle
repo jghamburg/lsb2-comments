@@ -3,6 +3,7 @@ buildscript {
 		springBootVersion = '2.0.4.RELEASE'
 		springCloudVersion = 'Finchley.RELEASE'
 		springCloudStreamVersion = 'Elmhurst.RELEASE'
+		lombokVersion = '1.18.2'
 	}
 	repositories {
 		mavenCentral()
@@ -21,7 +22,7 @@ plugins {
 }
 
 apply plugin: 'java'
-apply plugin: 'eclipse'
+apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
@@ -55,7 +56,7 @@ dependencies {
 	compile('org.springframework.cloud:spring-cloud-starter-netflix-eureka-client')
 	compile('org.springframework.cloud:spring-cloud-starter-netflix-hystrix')
 	compile('org.springframework.cloud:spring-cloud-starter-config')
-	compile('org.projectlombok:lombok')
+	compile("org.projectlombok:lombok:${lombokVersion}")
 
 	compile('org.springframework.boot:spring-boot-starter-security')
 	compile('org.springframework.session:spring-session-data-mongodb')

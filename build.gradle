@@ -2,7 +2,7 @@ buildscript {
   ext {
 		springCloudVersion = 'Finchley.RELEASE'
 		springCloudStreamVersion = 'Elmhurst.RELEASE'
-		lombokVersion = '1.18.2'
+		lombokVersion = '1.18.4'
   }
 }
 
@@ -13,11 +13,17 @@ plugins {
   // end::gradle-git[]
   id 'idea'
   id 'java-gradle-plugin'
+  id 'io.franzbecker.gradle-lombok' version '2.0'
   id 'com.avast.gradle.docker-compose' version '0.8.4'
   id 'com.google.cloud.tools.jib' version '0.9.8'
 }
 
 apply plugin: 'io.spring.dependency-management'
+
+lombok {
+  version = '1.18.4'
+  sha256 = ""
+}
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -69,10 +75,10 @@ composeUp.dependsOn composeBuild
 
 jib {
   from {
-    image = 'docker.obc.ov.otto.de/base/openjdk:8-jre-alpine'
+    image = 'openjdk:8-jre-alpine'
   }
   to {
-    image = "docker.obc.ov.otto.de/jib/lsb2-comments:local"
+    image = "jghamburg/lsb2-comments:local"
 //    credHelper = 'osxkeychain'
   }
   container {

@@ -5,12 +5,14 @@ services:
   # service name has to be environment-unique, else one startup will shutdown others
   local-comments-server:
     labels:
-      de.otto.template.description: "Comments Server for local environment"
-      de.otto.drop.brandshopupdater.version: "local"
+      lsb2.template.description: "Comments Server for local environment"
+      lsb2.version: "local"
     image: "comments-server:local"
     build:
       context: ../..
       dockerfile: ./docker/Dockerfile
+      args:
+        JAR_FILE: ./build/libs/lsb2-comments.jar
     ports:
       - "9000:9000" # web port
       - "49000:49000" # debug port

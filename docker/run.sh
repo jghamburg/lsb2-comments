@@ -1,7 +1,7 @@
 #!/bin/sh
 profile=$1
 java_heap="${2:-768m}"
-debub_port=${DEBUG_PORT:49000}
+debug_port=${DEBUG_PORT:49000}
 
 echo "startup the container! find log in docker logs"
 if [ -z ${JAVA_REMOTE_DEBUGGING+x} ]; then

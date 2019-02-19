@@ -7,7 +7,7 @@ services:
     labels:
       lsb2.template.description: "Comments Server for local environment"
       lsb2.version: "local"
-    image: "comments-server:local"
+    image: "jghamburg/lsb2-comments:local"
     build:
       context: ../..
       dockerfile: ./docker/Dockerfile

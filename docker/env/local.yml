@@ -18,8 +18,8 @@ services:
       - "49000:49000" # debug port
     environment:
       PROFILE: "local"
-      JAVA_REMOTE_DEBUGGING: "true"
       DEBUG_PORT: 49000
+#      JAVA_REMOTE_DEBUGGING: "true"
     networks:
       - learn-ms-network
 

@@ -1,0 +1,12 @@
+image:
+  repository: jghamburg/lsb2-comments
+  tag: local
+  pullPolicy: IfNotPresent
+
+fullnameOverride: "lsb2-comments"
+
+service:
+  name: lsb2-comments
+  description: The lsb2 comments service
+  type: ClusterIP
+  port: 80

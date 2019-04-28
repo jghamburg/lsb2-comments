@@ -1,5 +1,5 @@
 plugins {
-  id 'org.springframework.boot' version '2.1.2.RELEASE' apply true
+  id 'org.springframework.boot' version '2.1.4.RELEASE' apply true
   id "io.spring.dependency-management" version "1.0.6.RELEASE"
   id 'java'
   id 'io.franzbecker.gradle-lombok' version '2.0'

@@ -6,8 +6,8 @@ services:
   lsb2-comments:
     labels:
       lsb2.template.description: "Comments Server for local environment"
-      lsb2.version: "local"
-    image: "jghamburg/lsb2-comments:local"
+      lsb2.version: $TAG
+    image: "jghamburg/lsb2-comments:$TAG"
     build:
       context: ../..
       dockerfile: ./docker/Dockerfile
@@ -21,9 +21,3 @@ services:
       PORT: 8080
       # DEBUG_PORT: 49000
       # JAVA_REMOTE_DEBUGGING: "true"
-    networks:
-      - learn-ms-network
-
-networks:
-  learn-ms-network:
-    external: true

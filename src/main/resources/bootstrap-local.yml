@@ -1,6 +1,6 @@
 spring:
   application:
-    name: comments
+    name: lsb2-comments
   cloud:
     config:
       label: session

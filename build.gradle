@@ -62,7 +62,6 @@ lombok {
 
 bootJar {
   baseName = 'lsb2-comments'
-  version = ''
   excludeDevtools = false
 }
 

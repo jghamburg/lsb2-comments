@@ -21,7 +21,7 @@ import org.springframework.session.data.mongo.config.annotation.web.reactive.Ena
  * @author Greg Turnquist
  */
 // tag::code[]
-@EnableMongoWebSession
+//@EnableMongoWebSession
 public class SessionConfig {
 
 }

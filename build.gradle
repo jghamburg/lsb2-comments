@@ -1,11 +1,14 @@
 plugins {
-  id 'org.springframework.boot' version '2.1.10.RELEASE' apply true
+  id 'org.springframework.boot' version '2.2.1.RELEASE'
   id "io.spring.dependency-management" version "1.0.8.RELEASE"
   id 'java'
-  id 'idea'
-  id 'io.franzbecker.gradle-lombok' version '3.0.0'
+  id 'groovy'
+  id 'jacoco'
+  id 'io.franzbecker.gradle-lombok' version '3.1.0'
   id 'com.gorylenko.gradle-git-properties' version '2.1.0'
-  
+
+  id 'com.palantir.docker' version '0.22.1'
+  id 'com.palantir.docker-run' version '0.22.1'
   id 'com.avast.gradle.docker-compose' version '0.9.4'
   id 'com.google.cloud.tools.jib' version '1.5.1'
 
@@ -15,13 +18,26 @@ plugins {
 
   id 'se.patrikerdes.use-latest-versions' version '0.2.12'
   id 'com.github.ben-manes.versions' version '0.24.0'
-    
+
   id 'maven-publish'
+  id "org.owasp.dependencycheck" version "5.2.4"
+  id 'io.qameta.allure' version '2.8.1'
+  id 'org.unbroken-dome.test-sets' version '2.1.1'
 }
 
 ext {
   set('activeSpringProfiles', 'local')
   set('chartRepoUrl', 'http://chartmuseum.default.svc.cluster.local/')
+  set('springCloudVersion', 'Hoxton.RELEASE')
+  set('junitplatform', '1.5.2')
+  set('junitjupiter', '5.5.2')
+  set('powermockVersion', '2.0.2')
+  set('spockversion', '1.3-groovy-2.5')
+  set('spockReportsVersion', '1.6.2')
+  set('mockitoversion', '2.28.2')
+  set('groovyversion', '2.5.8')
+  set('allureVersion', '2.12.1')
+  set('togglzversion', '2.6.1.Final')
 }
 
 group = 'com.gregturnquist.learningspringboot'
@@ -34,7 +50,7 @@ repositories {
 
 dependencies {
   // enforce versions defined in bom
-  implementation enforcedPlatform('org.springframework.cloud:spring-cloud-dependencies:Greenwich.SR4')
+  implementation platform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
   implementation 'org.springframework.boot:spring-boot-starter-actuator'
   implementation 'org.springframework.boot:spring-boot-starter-security'
   implementation 'org.springframework.cloud:spring-cloud-starter-config'
@@ -42,13 +58,56 @@ dependencies {
   implementation 'org.springframework.boot:spring-boot-starter-webflux'
   implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
   implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
-  runtimeOnly 'org.springframework.boot:spring-boot-devtools'
   implementation 'org.springframework.cloud:spring-cloud-starter-stream-rabbit'
-  implementation 'org.springframework.cloud:spring-cloud-stream-reactive'
+//  implementation 'org.springframework.cloud:spring-cloud-stream-reactive'
   implementation 'org.springframework.session:spring-session-data-mongodb'
   implementation 'io.micrometer:micrometer-core'
 
+  implementation "org.togglz:togglz-spring-boot-starter:${togglzversion}"
+  implementation "org.togglz:togglz-console:${togglzversion}"
+  implementation ("org.togglz:togglz-spring-security:${togglzversion}")
+//  implementation ("org.togglz:togglz-spring-web:${togglzversion}")
+//  implementation "com.github.heneke.thymeleaf:thymeleaf-extras-togglz:1.0.1.RELEASE"
+//  runtimeOnly 'org.springframework.boot:spring-boot-devtools'
+
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  testImplementation('de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.2.0')
+  testImplementation('org.hamcrest:java-hamcrest:2.0.0.0')
+  testImplementation('org.springframework.boot:spring-boot-starter-test') {
+    exclude group: 'junit', module: 'junit'
+  }
+  testImplementation('org.springframework.cloud:spring-cloud-stream-test-support')
+  testImplementation 'org.springframework.security:spring-security-test'
+  // JUnit 5
+  testImplementation "org.junit.platform:junit-platform-launcher:${junitplatform}"
+  testImplementation "org.junit.platform:junit-platform-engine:${junitplatform}"
+  testImplementation "org.junit.platform:junit-platform-commons:${junitplatform}"
+  testImplementation "org.junit.jupiter:junit-jupiter-api:${junitjupiter}"
+  testImplementation "org.junit.vintage:junit-vintage-engine:${junitjupiter}"
+  testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitjupiter}"
+  testImplementation "org.mockito:mockito-core:${mockitoversion}"
+  testImplementation "org.mockito:mockito-junit-jupiter:${mockitoversion}"
+  testImplementation "org.powermock:powermock-api-mockito2:${powermockVersion}"
+  // feature togglz
+  testImplementation "org.togglz:togglz-junit5:${togglzversion}"
+  testImplementation "org.togglz:togglz-junit:${togglzversion}"
+  // spock test framework
+  // Groovy
+  testImplementation "org.codehaus.groovy:groovy-all:${groovyversion}"
+  testImplementation "org.spockframework:spock-core:${spockversion}"
+  testImplementation "org.spockframework:spock-spring:${spockversion}"
+  testImplementation("com.athaydes:spock-reports:${spockReportsVersion}") {
+    transitive = false // this avoids affecting your version of Groovy/Spock
+  }
+  testImplementation 'com.blogspot.toomuchcoding:spock-subjects-collaborators-extension:1.2.2'
+  testRuntimeOnly 'cglib:cglib-nodep:3.3.0'
+  testRuntimeOnly 'org.objenesis:objenesis:3.1'
+  // allure test reporting
+  //testRuntimeOnly "com.squareup.retrofit2:converter-gson:${allureVersion}"
+  testRuntimeOnly "io.qameta.allure:allure-okhttp3:${allureVersion}"
+//  testRuntimeOnly "io.qameta.allure:allure-spock:${allureVersion}"
+  testRuntimeOnly "io.qameta.allure:allure-junit4:${allureVersion}"
+  testRuntimeOnly "io.qameta.allure:allure-junit5:${allureVersion}"
 }
 
 sourceCompatibility = 11
@@ -59,18 +118,104 @@ lombok {
   sha256 = ""
 }
 
+springBoot {
+  buildInfo {
+    properties {
+      artifact = "${rootProject.name}"
+      group = "${project.group}"
+      name = "${rootProject.name}"
+      version = "${project.version}"
+    }
+  }
+}
 bootJar {
-  baseName = 'lsb2-comments'
+  archiveBaseName = 'lsb2-comment'
+  manifest {
+    attributes 'Implementation-Title': 'Learning spring boot 2 - module comments',
+        'Implementation-Version': project.version,
+        'Built-By': System.getProperty('user.name'),
+        'Built-Date': new Date(),
+        'Built-JDK': System.getProperty('java.version'),
+        'Built-Gradle': gradle.gradleVersion
+  }
   excludeDevtools = false
 }
 
-publishing {
-    publications {
-        maven(MavenPublication) {
-            groupId 'com.gregturnquist.learningspringboot'
-            from components.java
-        }
+allprojects {
+  gradle.projectsEvaluated {
+    tasks.withType(JavaCompile) {
+      options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
     }
+  }
+}
+
+dependencyCheck {
+  autoUpdate = true
+  cveValidForHours = 1
+  format = 'ALL'
+  failOnError = false
+}
+//
+// test configurations
+tasks.withType(Test) {
+  useJUnitPlatform()
+  testLogging.showStandardStreams = false
+  maxParallelForks = (int) (Runtime.runtime.availableProcessors().intdiv(2) ?: 1)
+}
+if (!ext.has('ignoreTestFailures')) {
+  ext.ignoreTestFailures = false
+}
+test {
+  ignoreFailures = project.ext.ignoreTestFailures
+  testLogging {
+    info {
+      events "skipped", "failed"
+      exceptionFormat "short"
+    }
+  }
+}
+check.dependsOn test
+// add integration test support
+testSets {
+  integrationTest { dirName = 'integration-test' }
+}
+integrationTest {
+  ignoreFailures = project.ext.ignoreTestFailures
+}
+check.dependsOn integrationTest
+integrationTest.mustRunAfter test
+
+jacocoTestReport {
+  executionData(file("${project.buildDir}/jacoco/test.exec"),
+      file("${project.buildDir}/jacoco/integrationTest.exec"))
+
+  reports {
+    xml.enabled true
+    xml.destination(file("${project.buildDir}/reports/jacoco/all-tests/jacocoAllTestReport.xml"))
+    html.enabled true
+    html.destination file("${project.buildDir}/reports/jacoco/all-tests/html")
+  }
+}
+//
+// add test report allure
+allure {
+  version = "${allureVersion}"
+  aspectjweaver = false
+  autoconfigure = true
+
+  resultsDir = file("${buildDir}/allure-results")
+  reportDir = file("${buildDir}/test/allure-results")
+
+  downloadLinkFormat = 'https://dl.bintray.com/qameta/maven/io/qameta/allure/allure-commandline/%s/allure-commandline-%s.zip'
+}
+
+publishing {
+  publications {
+    maven(MavenPublication) {
+      groupId 'com.gregturnquist.learningspringboot'
+      from components.java
+    }
+  }
 }
 
 helm {
@@ -79,9 +224,9 @@ helm {
   outputDir = file("${project.buildDir}/helm")
   // The global lint configuration applies to all charts
   lint {
-      // treat linter warnings as errors (failing the build)
-      strict = false
-      enabled = true
+    // treat linter warnings as errors (failing the build)
+    strict = false
+    enabled = true
   }
   filtering {
     // This value will be resolvable in all charts' YAML files as ${authorName}
@@ -90,41 +235,41 @@ helm {
   }
   charts {
     'lsb2-comments' {
-        chartName = project.name
-        chartVersion = project.version.toString()
-        sourceDir = file('src/main/helm/lsb2-comments')
+      chartName = project.name
+      chartVersion = project.version.toString()
+      sourceDir = file('src/main/helm/lsb2-comments')
     }
   }
   repositories {
-      museum {
-          url = uri(chartRepoUrl)
-      }
+    museum {
+      url = uri(chartRepoUrl)
+    }
   }
   // helm-release plugin config
   releases {
-      'lsb2-comments' {
-          from charts.'lsb2-comments'
-          namespace = 'local'
-          replace = false
-          purge = true
-          dryRun = false
-          wait = false
-          // pass values (like --set on the command line)
-          values = [ 'image.tag': project.version ]
-          // pass value files (like -f on the command line)
-          valueFiles.from "src/main/helm/lsb2-comments/values.yaml"
-          valueFiles.from "src/main/helm/lsb2-comments/values-${activeSpringProfiles}.yaml"
-      }
+    'lsb2-comments' {
+      from charts.'lsb2-comments'
+      namespace = 'local'
+      replace = false
+      purge = true
+      dryRun = false
+      wait = false
+      // pass values (like --set on the command line)
+      values = ['image.tag': project.version]
+      // pass value files (like -f on the command line)
+      valueFiles.from "src/main/helm/lsb2-comments/values.yaml"
+      valueFiles.from "src/main/helm/lsb2-comments/values-${activeSpringProfiles}.yaml"
+    }
   }
 
   // helm-publish plugin config
   publishing {
-      repositories {
-          museum {
-              url = uri(chartRepoUrl)
-          }
+    repositories {
+      museum {
+        url = uri(chartRepoUrl)
       }
-  }  
+    }
+  }
 }
 /*
  * docker-compose plugin configuration.
@@ -132,12 +277,15 @@ helm {
  */
 dockerCompose {
   useComposeFiles = ['docker/env/local.yml'] // like 'docker-compose -f <file>'; default is empty
-  buildBeforeUp = true // performs 'docker-compose build' before calling the 'up' command; default is true
+  buildBeforeUp = true
+  // performs 'docker-compose build' before calling the 'up' command; default is true
 
   waitForTcpPorts = true // turns off the waiting for exposed TCP ports opening
-  captureContainersOutput = true // if true, prints output of all containers to Gradle output - very useful for debugging; default is false
+  captureContainersOutput = true
+  // if true, prints output of all containers to Gradle output - very useful for debugging; default is false
 
-  stopContainers = true // doesn't call `docker-compose down` - see below the paragraph about reconnecting
+  stopContainers = true
+  // doesn't call `docker-compose down` - see below the paragraph about reconnecting
   removeContainers = true
   removeOrphans = false // removes containers for services not defined in the Compose file
 
@@ -165,12 +313,13 @@ jib {
   }
 }
 
-task semanticRelease (type: Exec){
-  workingDir '.'
-  commandLine 'semantic-release', '-b', 'master', '--no-ci'
-}
-
-task verifySemanticRelease (type: Exec){
-  workingDir '.'
-  commandLine 'semantic-release', '-b', 'master'
+dockerRun{
+    name 'semantic-release'
+    image 'jghamburg/git-semantic-release'
+    volumes "${projectDir}": '/app'
+    ports '7080:5000'
+    daemonize false
+    clean true
+    command 'semantic-release', '-b', 'master', '--no-ci'
+    env 'GH_TOKEN': "${System.env.GH_TOKEN}", 'GIT_CREDENTIALS': "${System.env.GIT_CREDENTIALS}"
 }

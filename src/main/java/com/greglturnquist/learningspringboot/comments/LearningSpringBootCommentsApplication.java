@@ -16,18 +16,15 @@
 package com.greglturnquist.learningspringboot.comments;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.cloud.client.SpringCloudApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-/**
- * @author Greg Turnquist
- */
+/** @author Greg Turnquist */
 // tag::code[]
-@SpringCloudApplication
+@SpringBootApplication
 public class LearningSpringBootCommentsApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(
-			LearningSpringBootCommentsApplication.class);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(LearningSpringBootCommentsApplication.class);
+  }
 }
 // end::code[]

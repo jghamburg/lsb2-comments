@@ -33,11 +33,12 @@ public class SecurityConfiguration {
 	@Bean
 	SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) {
 		return http
-				.securityContextRepository(new WebSessionServerSecurityContextRepository())
+//				.securityContextRepository(new WebSessionServerSecurityContextRepository())
 				.authorizeExchange()
         .pathMatchers("/actuator/*").permitAll()
 				.anyExchange().authenticated()
 				.and()
+				.formLogin().and()
 				.csrf().disable()
 				.build();
 	}

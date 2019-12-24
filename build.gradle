@@ -59,7 +59,7 @@ dependencies {
   implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
   implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
   implementation 'org.springframework.cloud:spring-cloud-starter-stream-rabbit'
-//  implementation 'org.springframework.cloud:spring-cloud-stream-reactive'
+  implementation 'org.springframework.cloud:spring-cloud-stream-reactive'
   implementation 'org.springframework.session:spring-session-data-mongodb'
   implementation 'io.micrometer:micrometer-core'
 

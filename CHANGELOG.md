@@ -5,6 +5,13 @@
 
 * **runtime:** fix local startup configuration ([c2045dd](https://github.com/jghamburg/lsb2-comments/commit/c2045dd34c39442a8db7eee1fab8dda0288a6319))
 
+## [1.0.1](https://github.com/jghamburg/lsb2-comments/compare/v1.0.0...v1.0.1) (2019-12-24)
+
+
+### Bug Fixes
+
+* **runtime:** fix local startup configuration ([c2045dd](https://github.com/jghamburg/lsb2-comments/commit/c2045dd34c39442a8db7eee1fab8dda0288a6319))
+
 # 1.0.0 (2019-09-04)
 
 

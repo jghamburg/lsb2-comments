@@ -16,54 +16,46 @@
 package com.greglturnquist.learningspringboot.comments;
 
 import io.micrometer.core.instrument.MeterRegistry;
-import reactor.core.publisher.Flux;
+import java.util.function.Function;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.cloud.stream.annotation.EnableBinding;
-import org.springframework.cloud.stream.annotation.Input;
-import org.springframework.cloud.stream.annotation.Output;
-import org.springframework.cloud.stream.annotation.StreamListener;
-import org.springframework.cloud.stream.messaging.Processor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 
-/**
- * @author Greg Turnquist
- */
+/** @author Greg Turnquist */
 // tag::stream-1[]
 @Service
-@EnableBinding(Processor.class)
 public class CommentService {
-	// end::stream-1[]
+  // end::stream-1[]
 
-	private final CommentRepository repository;
+  private final CommentRepository repository;
 
-	private final MeterRegistry meterRegistry;
+  private final MeterRegistry meterRegistry;
 
-	public CommentService(CommentRepository repository,
-						  MeterRegistry meterRegistry) {
-		this.repository = repository;
-		this.meterRegistry = meterRegistry;
-	}
+  public CommentService(CommentRepository repository, MeterRegistry meterRegistry) {
+    this.repository = repository;
+    this.meterRegistry = meterRegistry;
+  }
 
-	// tag::stream-2[]
-	@StreamListener
-	@Output(Processor.OUTPUT)
-	public Flux<Comment> save(@Input(Processor.INPUT) Flux<Comment> newComment) {
-		return repository
-			.saveAll(newComment)
-			.map(comment -> {
-				meterRegistry
-					.counter("comments.consumed", "imageId", comment.getImageId())
-					.increment();
-				return comment;
-			});
-	}
-	// end::stream-2[]
+  // tag::stream-2[]
+  public Function<Flux<Comment>, Flux<Comment>> save() {
+    return newComment ->
+        repository
+            .saveAll(newComment)
+            .map(
+                comment -> {
+                  meterRegistry
+                      .counter("comments.consumed", "imageId", comment.getImageId())
+                      .increment();
+                  return comment;
+                });
+  }
+  // end::stream-2[]
 
-	@Bean
-	CommandLineRunner setUp(CommentRepository repository) {
-		return args -> {
-			repository.deleteAll().subscribe();
-		};
-	}
+  @Bean
+  CommandLineRunner setUp(CommentRepository repository) {
+    return args -> {
+      repository.deleteAll().subscribe();
+    };
+  }
 }

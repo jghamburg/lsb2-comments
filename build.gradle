@@ -1,5 +1,5 @@
 plugins {
-  id 'org.springframework.boot' version '2.2.1.RELEASE'
+  id 'org.springframework.boot' version '2.2.2.RELEASE'
   id "io.spring.dependency-management" version "1.0.8.RELEASE"
   id 'java'
   id 'groovy'
@@ -26,18 +26,18 @@ plugins {
 }
 
 ext {
-  set('activeSpringProfiles', 'local')
-  set('chartRepoUrl', 'http://chartmuseum.default.svc.cluster.local/')
-  set('springCloudVersion', 'Hoxton.RELEASE')
-  set('junitplatform', '1.5.2')
-  set('junitjupiter', '5.5.2')
-  set('powermockVersion', '2.0.2')
-  set('spockversion', '1.3-groovy-2.5')
-  set('spockReportsVersion', '1.6.2')
-  set('mockitoversion', '2.28.2')
-  set('groovyversion', '2.5.8')
-  set('allureVersion', '2.12.1')
-  set('togglzversion', '2.6.1.Final')
+  activeSpringProfiles = 'local'
+  chartRepoUrl = 'http://chartmuseum.default.svc.cluster.local/'
+  springCloudVersion = 'Hoxton.SR1'
+  junitplatform = '1.5.2'
+  junitjupiter = '5.5.2'
+  powermockVersion = '2.0.2'
+  spockversion = '1.3-groovy-2.5'
+  spockReportsVersion = '1.6.2'
+  mockitoversion = '2.28.2'
+  groovyversion = '2.5.8'
+  allureVersion = '2.12.1'
+  togglzversion = '2.6.1.Final'
 }
 
 group = 'com.gregturnquist.learningspringboot'
@@ -50,7 +50,7 @@ repositories {
 
 dependencies {
   // enforce versions defined in bom
-  implementation platform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
+  implementation enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
   implementation 'org.springframework.boot:spring-boot-starter-actuator'
   implementation 'org.springframework.boot:spring-boot-starter-security'
   implementation 'org.springframework.cloud:spring-cloud-starter-config'
@@ -59,16 +59,9 @@ dependencies {
   implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
   implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
   implementation 'org.springframework.cloud:spring-cloud-starter-stream-rabbit'
-  implementation 'org.springframework.cloud:spring-cloud-stream-reactive'
   implementation 'org.springframework.session:spring-session-data-mongodb'
   implementation 'io.micrometer:micrometer-core'
 
-  implementation "org.togglz:togglz-spring-boot-starter:${togglzversion}"
-  implementation "org.togglz:togglz-console:${togglzversion}"
-  implementation ("org.togglz:togglz-spring-security:${togglzversion}")
-//  implementation ("org.togglz:togglz-spring-web:${togglzversion}")
-//  implementation "com.github.heneke.thymeleaf:thymeleaf-extras-togglz:1.0.1.RELEASE"
-//  runtimeOnly 'org.springframework.boot:spring-boot-devtools'
 
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
   testImplementation('de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.2.0')
@@ -298,7 +291,7 @@ composePush.dependsOn composeBuild
 
 jib {
   from {
-    image = 'azul/zulu-openjdk-alpine:11.0.3'
+    image = 'azul/zulu-openjdk-alpine:11.0.5'
   }
   to {
     image = "jghamburg/lsb2-comments:local"

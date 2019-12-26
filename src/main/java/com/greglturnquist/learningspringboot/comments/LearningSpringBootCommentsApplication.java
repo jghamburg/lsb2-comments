@@ -19,7 +19,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /** @author Greg Turnquist */
-// tag::code[]
 @SpringBootApplication
 public class LearningSpringBootCommentsApplication {
 
@@ -27,4 +26,3 @@ public class LearningSpringBootCommentsApplication {
     SpringApplication.run(LearningSpringBootCommentsApplication.class);
   }
 }
-// end::code[]

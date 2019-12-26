@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/jghamburg/lsb2-comments/compare/v1.0.1...v1.1.0) (2019-12-26)
+
+
+### Features
+
+* **spring:** upgrade spring cloud to Hoxton ([030f8e7](https://github.com/jghamburg/lsb2-comments/commit/030f8e7c1563563c21e6821dd3446b4093e86cf4))
+
 ## [1.0.1](https://github.com/jghamburg/lsb2-comments/compare/v1.0.0...v1.0.1) (2019-12-24)
 
 

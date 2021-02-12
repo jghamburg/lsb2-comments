@@ -198,7 +198,7 @@ publishing {
 tasks.jib.dependsOn tasks.check
 jib {
     from {
-        image = 'gcr.io/distroless/java-debian10'
+        image = 'gcr.io/distroless/java:11'
     }
     to {
         image = 'jghamburg/lsb2-comments'

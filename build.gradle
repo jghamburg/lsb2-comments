@@ -54,6 +54,7 @@ dependencies {
     implementation platform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
@@ -90,7 +91,6 @@ dependencies {
     //testRuntimeOnly "com.squareup.retrofit2:converter-gson:${allureVersion}"
     testRuntimeOnly "io.qameta.allure:allure-okhttp3:${allureVersion}"
 //  testRuntimeOnly "io.qameta.allure:allure-spock:${allureVersion}"
-    testRuntimeOnly "io.qameta.allure:allure-junit4:${allureVersion}"
     testRuntimeOnly "io.qameta.allure:allure-junit5:${allureVersion}"
 }
 

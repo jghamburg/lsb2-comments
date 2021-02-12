@@ -1,6 +1,6 @@
 {
   debug: true,
-  repositoryUrl: "https://github.com/jghamburg/lsb2-comments.git",
+  repositoryUrl: "ssh://git@github.com/jghamburg/lsb2-comments.git",
   verifyConditions: ["@semantic-release/changelog", "@semantic-release/github"],
   prepare: ["@semantic-release/changelog", "gradle-semantic-release-plugin", "@semantic-release/git"],
   publish: [],

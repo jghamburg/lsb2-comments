@@ -113,6 +113,13 @@ springBoot {
     }
 }
 
+bootRun {
+    jvmArgs = [
+            "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5015",
+            "-Dspring.profiles.active=default",
+    ]
+}
+
 bootJar {
     archiveBaseName = 'lsb2-comment'
     excludeDevtools = false
